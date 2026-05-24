@@ -1,0 +1,49 @@
+# Personal genomic data — NEVER commit
+*.cram
+*.crai
+*.bam
+*.bai
+*.vcf
+*.vcf.gz
+*.vcf.gz.tbi
+*.fa
+*.fasta
+*.fasta.fai
+*.dict
+*.fq
+*.fq.gz
+*.fastq
+*.fastq.gz
+
+# Pipeline outputs
+results/
+work/
+.nextflow/
+.nextflow.log*
+*.nextflow.log*
+trace-*.txt
+timeline-*.html
+report-*.html
+dag-*.html
+
+# Caches & envs
+.cache/
+.conda/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Test fixtures may include small VCFs — allow them explicitly
+!tests/test_data/*.vcf
+!tests/test_data/*.vcf.gz
+!tests/test_data/*.vcf.gz.tbi
+!tests/test_data/*.cram
+!tests/test_data/*.crai

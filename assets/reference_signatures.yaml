@@ -1,0 +1,123 @@
+# Reference build fingerprints used by bin/check_reference.py.
+#
+# Most consumer-WGS VCFs do NOT include MD5s in their ##contig header lines
+# (Nebula's DRAGEN output, for example, has only `length=`). So the primary
+# fingerprint is:
+#   1. Contig naming convention (UCSC "chr1" vs Ensembl/NCBI "1")
+#   2. Lengths of primary chromosomes (chr1, chr22, chrX, chrY, chrM)
+#   3. Total contig count
+#   4. Alt-contig count (distinguishes primary-only from alt-aware assemblies)
+#   5. Optional MD5s, used when the VCF/CRAM header includes them
+#
+# Sources:
+#   - GRCh38 lengths: NCBI Assembly GCF_000001405.40
+#   - GRCh37 lengths: NCBI Assembly GCF_000001405.25
+#   - Broad hg38 dict: gs://genomics-public-data/references/hg38/v0/Homo_sapiens_assembly38.dict
+#   - T2T-CHM13v2.0:  https://github.com/marbl/CHM13 (GCA_009914755.4)
+
+references:
+
+  - id: broad_hg38
+    build: GRCh38
+    variant: "Broad hg38 (alt-aware analysis set)"
+    naming: chr_prefixed
+    description: |
+      The standard Broad/GATK reference: Homo_sapiens_assembly38.fasta.
+      Includes 25 primary contigs + alt loci + decoys + HLA contigs.
+      Used by Nebula DRAGEN, GATK best-practices, and most modern pipelines.
+    total_contigs: 3366
+    alt_contigs: 261
+    primary_chromosomes:
+      chr1:  {length: 248956422, md5: 6aef897c3d6ff0c78aff06ac189178dd}
+      chr22: {length: 50818468,  md5: ac37ec46683600f808cdd41eac1d55cd}
+      chrX:  {length: 156040895, md5: 2b3a55ff7f58eb308420c8a9b11cac50}
+      chrY:  {length: 57227415,  md5: ce3e31103314a704255f3cd90369ecce}
+      chrM:  {length: 16569,     md5: c68f52674c9fb33aef52dcf399755519}
+
+  - id: grch38_primary
+    build: GRCh38
+    variant: "GRCh38 primary assembly (no alts, no decoys)"
+    naming: chr_prefixed
+    description: |
+      Primary assembly: 22 autosomes + chrX + chrY + chrM only.
+      Common for lighter pipelines that don't need alt-aware mapping.
+    total_contigs: 25
+    alt_contigs: 0
+    primary_chromosomes:
+      chr1:  {length: 248956422}
+      chr22: {length: 50818468}
+      chrX:  {length: 156040895}
+      chrY:  {length: 57227415}
+      chrM:  {length: 16569}
+
+  - id: grch38_ensembl
+    build: GRCh38
+    variant: "GRCh38 Ensembl/NCBI naming (no chr prefix)"
+    naming: ensembl
+    description: |
+      Same sequence as GRCh38 but with Ensembl-style contig names ("1" not "chr1",
+      "MT" not "chrM"). Used by Ensembl VEP and many European pipelines.
+    primary_chromosomes:
+      "1":  {length: 248956422}
+      "22": {length: 50818468}
+      "X":  {length: 156040895}
+      "Y":  {length: 57227415}
+      MT:   {length: 16569}
+
+  - id: ucsc_hg19
+    build: GRCh37
+    variant: "UCSC hg19 (chr-prefixed GRCh37)"
+    naming: chr_prefixed
+    description: |
+      UCSC's GRCh37 release. chr-prefixed naming, chrM is the older
+      NC_001807 sequence (16571 bp), NOT the rCRS used in GRCh38.
+    primary_chromosomes:
+      chr1:  {length: 249250621}
+      chr22: {length: 51304566}
+      chrX:  {length: 155270560}
+      chrY:  {length: 59373566}
+      chrM:  {length: 16571}
+
+  - id: b37
+    build: GRCh37
+    variant: "1000 Genomes b37 (no chr prefix, no decoys)"
+    naming: ensembl
+    description: |
+      The 1000 Genomes Phase 1/3 GRCh37 reference. Same primary sequence as
+      UCSC hg19 but Ensembl naming ("1" not "chr1") and rCRS chrM (16569).
+    primary_chromosomes:
+      "1":  {length: 249250621}
+      "22": {length: 51304566}
+      "X":  {length: 155270560}
+      "Y":  {length: 59373566}
+      MT:   {length: 16569}
+
+  - id: hs37d5
+    build: GRCh37
+    variant: "hs37d5 (1000G b37 + decoy)"
+    naming: ensembl
+    description: |
+      b37 plus a 35 Mb decoy contig ("hs37d5") to absorb reads from unplaced
+      sequence. Used by 1000 Genomes Phase 3 alignment.
+    extra_contigs: ["hs37d5"]
+    primary_chromosomes:
+      "1":  {length: 249250621}
+      "22": {length: 51304566}
+      "X":  {length: 155270560}
+      "Y":  {length: 59373566}
+      MT:   {length: 16569}
+
+  - id: t2t_chm13_v2
+    build: T2T-CHM13v2.0
+    variant: "Telomere-to-Telomere CHM13 v2.0"
+    naming: chr_prefixed
+    description: |
+      Complete, gapless human reference from the T2T consortium.
+      Lengths are noticeably different from GRCh38 (chr1 ~248.4M vs 248.96M).
+      chrY added in v2.0 from HG002.
+    primary_chromosomes:
+      chr1:  {length: 248387328}
+      chr22: {length: 51324926}
+      chrX:  {length: 154259566}
+      chrY:  {length: 62460029}
+      chrM:  {length: 16569}
