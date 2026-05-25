@@ -18,6 +18,7 @@
 # Pipeline outputs
 results/
 work/
+.clinvar_cache/
 .nextflow/
 .nextflow.log*
 *.nextflow.log*
