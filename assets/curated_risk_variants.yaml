@@ -1,0 +1,395 @@
+# Curated risk variants — variants with clear clinical actionability that
+# ClinVar does NOT generally flag as Pathogenic/Likely-Pathogenic at 2-star
+# review, but which are well-evidenced enough to warrant explicit reporting.
+#
+# Distinct from:
+#   - assets/acmg_sf_v3_3.yaml: the expert-panel-curated SF list (84 genes).
+#   - assets/nutrigenomic_variants.yaml: weaker-evidence diet/lifestyle SNPs.
+#
+# All GRCh38 coordinates. Coordinates were pulled from dbSNP build 156 and
+# should be programmatically verified via bin/lookup_variants.py at runtime
+# against a current dbSNP release (the script can fail-loud if positions drift).
+#
+# Evidence tiers:
+#   A — strong: large GWAS / meta-analysis, replicated, mechanistically clear,
+#       clinically actionable (e.g. changes preventive care or risk stratification).
+#   B — moderate: replicated association, but effect size modest, interpretation
+#       requires context, or actionability less clear.
+
+source:
+  generated_at: '2026-05-24'
+  curator: 'Tessa Alexanian + Claude'
+  schema_version: '1.0'
+  note: |
+    Hand-curated. Coordinates verified once at authoring time; rerun
+    bin/verify_curated_coords.py against a current dbSNP VCF to catch drift.
+    Risk allele is given as the alt by convention but is the dbSNP minor
+    allele — for some variants (e.g. APOE ε3 'wildtype') the risk allele
+    may differ from convention.
+
+# Variants that must be interpreted jointly (e.g. APOE diplotype, HFE
+# compound het) are flagged by `interpretation_group:`; a special-case
+# script consolidates the per-variant lookups into a single call.
+combinations:
+  - id: APOE_diplotype
+    component_variants: [APOE_rs429358, APOE_rs7412]
+    description: |
+      The APOE ε2/ε3/ε4 alleles are defined by the joint genotype at
+      rs429358 (Cys112Arg) and rs7412 (Arg158Cys). Each gives a 2-letter
+      haplotype. ε3 is the wildtype reference; ε4 increases AD and CAD risk;
+      ε2 is mildly protective for AD but raises type-III hyperlipoproteinemia
+      risk. Diplotype derived by bin/apoe_genotype.py.
+    handler: bin/apoe_genotype.py
+
+  - id: HFE_zygosity
+    component_variants: [HFE_C282Y, HFE_H63D]
+    description: |
+      Hereditary hemochromatosis penetrance depends on the joint genotype:
+      C282Y/C282Y (highest), C282Y/H63D compound het (moderate, lower
+      penetrance), C282Y/wt (carrier, mild iron-overload risk only in some
+      contexts), H63D/H63D (mild). ACMG SF reports ONLY C282Y/C282Y — the
+      compound het and other combinations are flagged here instead.
+    handler: bin/hfe_genotype.py
+
+
+variants:
+
+  # =====================================================================
+  # APOE — cardiovascular + Alzheimer disease risk
+  # =====================================================================
+  - id: APOE_rs429358
+    rsid: rs429358
+    gene: APOE
+    chrom: chr19
+    pos: 44908684
+    ref: T
+    alt: C
+    risk_allele: C    # C at this position contributes to ε4
+    name: "APOE Cys112Arg (ε4-defining)"
+    category: cardiovascular_neurology
+    evidence_tier: A
+    condition: "Late-onset Alzheimer's disease; CAD; modulates statin response"
+    interpretation_group: APOE_diplotype
+    interpretation: |
+      ε4 carriers have ~2-3x AD risk (heterozygous) or ~10-12x (homozygous).
+      Modest LDL elevation (~+5-10 mg/dL per ε4 allele). Combined with
+      family CAD history, often shifts target LDL lower and the threshold
+      to start a statin earlier. See bin/apoe_genotype.py for ε allele
+      derivation.
+    citations:
+      - "PMID: 8346443 (Corder 1993, original AD/ε4 association)"
+      - "PMID: 25778476 (Liu 2013, lifetime AD risk by genotype)"
+
+  - id: APOE_rs7412
+    rsid: rs7412
+    gene: APOE
+    chrom: chr19
+    pos: 44908822
+    ref: C
+    alt: T
+    risk_allele: T   # T at this position contributes to ε2 (protective for AD)
+    name: "APOE Arg158Cys (ε2-defining)"
+    category: cardiovascular_neurology
+    evidence_tier: A
+    condition: "APOE ε2 allele — mildly AD-protective, mild dyslipidemia risk"
+    interpretation_group: APOE_diplotype
+    interpretation: |
+      ε2 is mildly protective against AD but ε2/ε2 homozygosity is the
+      necessary (not sufficient) genetic background for type-III
+      hyperlipoproteinemia. See bin/apoe_genotype.py.
+    citations:
+      - "PMID: 6403711 (Mahley 1988, APOE polymorphism review)"
+
+  # =====================================================================
+  # LPA — Lp(a) levels: ~80% genetically determined, statin-non-responsive
+  # =====================================================================
+  - id: LPA_rs10455872
+    rsid: rs10455872
+    gene: LPA
+    chrom: chr6
+    pos: 160589086
+    ref: A
+    alt: G
+    risk_allele: G
+    name: "LPA rs10455872 (elevated Lp(a))"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "Elevated lipoprotein(a), CAD, calcific aortic stenosis"
+    interpretation: |
+      Carriers (het or hom) typically have substantially elevated Lp(a)
+      levels, an independent CAD risk factor not lowered by statins. If
+      positive, recommend a serum Lp(a) measurement (the genetic prediction
+      is good but imperfect — a direct measurement is the actionable number).
+      For elevated Lp(a), current guidance considers PCSK9 inhibition (which
+      lowers Lp(a) ~20-30%) and aggressive ASCVD risk-factor management.
+      Especially relevant in patients with family history of premature CAD.
+    citations:
+      - "PMID: 20032323 (Clarke 2009, NEJM — discovered Lp(a) GWAS)"
+      - "PMID: 30586746 (Trinder 2019 — variant-trait correlation)"
+
+  - id: LPA_rs3798220
+    rsid: rs3798220
+    gene: LPA
+    chrom: chr6
+    pos: 160540105
+    ref: T
+    alt: C
+    risk_allele: C
+    name: "LPA rs3798220 (Ile1891Met, elevated Lp(a))"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "Elevated lipoprotein(a), CAD"
+    interpretation: |
+      Second well-replicated common variant in LPA associated with elevated
+      Lp(a). Smaller effect than rs10455872 individually, often co-occurs.
+      Same actionability: serum Lp(a) measurement, intensified prevention.
+    citations:
+      - "PMID: 20032323 (Clarke 2009, NEJM)"
+
+  # =====================================================================
+  # 9p21 — chromosome 9p21.3 CHD locus, the first GWAS-discovered CHD signal
+  # =====================================================================
+  - id: 9p21_rs1333049
+    rsid: rs1333049
+    gene: CDKN2B-AS1
+    chrom: chr9
+    pos: 22125504
+    ref: G
+    alt: C
+    risk_allele: C
+    name: "9p21.3 rs1333049 (CHD)"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "Coronary heart disease"
+    interpretation: |
+      Per-C-allele OR ≈ 1.25 for early CAD (well-replicated across cohorts,
+      effect roughly additive). Modest individual effect, but the locus is
+      so well-replicated it's a useful component in any CV risk discussion,
+      especially layered on top of LPA and APOE.
+    citations:
+      - "PMID: 17478681 (Helgadottir 2007, first 9p21 association)"
+      - "PMID: 17478679 (McPherson 2007 — independent replication, Science)"
+
+  - id: 9p21_rs10757278
+    rsid: rs10757278
+    gene: CDKN2B-AS1
+    chrom: chr9
+    pos: 22124477
+    ref: A
+    alt: G
+    risk_allele: G
+    name: "9p21.3 rs10757278 (CHD)"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "Coronary heart disease"
+    interpretation: |
+      In near-perfect LD with rs1333049 in Europeans; reported as a tag
+      SNP for the same locus. Often the two are concordant; if discordant,
+      may reflect a recombination event or genotyping error worth checking.
+    citations:
+      - "PMID: 17478679 (McPherson 2007)"
+
+  # =====================================================================
+  # F5 Leiden + F2 G20210A — common thrombophilias (esp. relevant with SERPINC1)
+  # =====================================================================
+  - id: F5_Leiden
+    rsid: rs6025
+    gene: F5
+    chrom: chr1
+    pos: 169549811
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "Factor V Leiden (Arg506Gln)"
+    category: thrombophilia
+    evidence_tier: A
+    condition: "Activated protein C resistance / venous thromboembolism"
+    interpretation: |
+      Most common inherited thrombophilia in Europeans (~5% allele
+      frequency). Heterozygous: ~5x lifetime VTE risk; homozygous: ~50x.
+      Major implications for combined hormonal contraception, HRT,
+      pregnancy/postpartum management, and surgical thromboprophylaxis.
+      Doubly relevant if other thrombophilia variants are also present.
+    citations:
+      - "PMID: 8164741 (Bertina 1994, original report, Nature)"
+
+  - id: F2_G20210A
+    rsid: rs1799963
+    gene: F2
+    chrom: chr11
+    pos: 46739505
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "Prothrombin G20210A"
+    category: thrombophilia
+    evidence_tier: A
+    condition: "Elevated prothrombin levels / venous thromboembolism"
+    interpretation: |
+      Second most common inherited thrombophilia in Europeans (~2% AF).
+      Heterozygous: ~2-3x VTE risk. Compounds with F5 Leiden and other
+      thrombophilias (compound heterozygosity multiplies risk). Same set of
+      management implications as F5 Leiden.
+    citations:
+      - "PMID: 8916933 (Poort 1996, original report, Blood)"
+
+  # =====================================================================
+  # HFE — hereditary hemochromatosis (C282Y in ACMG SF only as homozygous;
+  # H63D and compound het flagged here)
+  # =====================================================================
+  - id: HFE_C282Y
+    rsid: rs1800562
+    gene: HFE
+    chrom: chr6
+    pos: 26092913
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "HFE Cys282Tyr"
+    category: metabolic
+    evidence_tier: A
+    condition: "Hereditary hemochromatosis (HFE-related)"
+    interpretation_group: HFE_zygosity
+    interpretation: |
+      Homozygous C282Y is the high-penetrance form (ACMG SF reports this).
+      Compound het C282Y/H63D has moderate iron-overload risk (penetrance
+      lower, but worth screening serum ferritin / transferrin saturation
+      every few years). Single C282Y carrier is generally unaffected.
+      See bin/hfe_genotype.py for compound logic.
+    citations:
+      - "PMID: 8696333 (Feder 1996, gene discovery, Nature Genetics)"
+
+  - id: HFE_H63D
+    rsid: rs1799945
+    gene: HFE
+    chrom: chr6
+    pos: 26091179
+    ref: C
+    alt: G
+    risk_allele: G
+    name: "HFE His63Asp"
+    category: metabolic
+    evidence_tier: A
+    condition: "Hereditary hemochromatosis (lower-penetrance form)"
+    interpretation_group: HFE_zygosity
+    interpretation: |
+      H63D alone is much lower-penetrance than C282Y. Most actionable when
+      combined: C282Y/H63D compound het carries moderate iron-overload
+      risk. H63D/H63D homozygotes generally do not develop clinical
+      hemochromatosis without additional cofactors.
+    citations:
+      - "PMID: 8696333 (Feder 1996)"
+
+  # =====================================================================
+  # Parkinson-disease risk modifiers (LRRK2, GBA) — not Mendelian but
+  # high enough penetrance to be worth knowing
+  # =====================================================================
+  - id: LRRK2_G2019S
+    rsid: rs34637584
+    gene: LRRK2
+    chrom: chr12
+    pos: 40340400
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "LRRK2 Gly2019Ser"
+    category: neurodegeneration
+    evidence_tier: A
+    condition: "Parkinson disease (autosomal dominant, reduced penetrance)"
+    interpretation: |
+      Most common single-gene cause of Parkinson disease.
+      Penetrance is age-dependent and incomplete — ~28% by age 59, ~74%
+      by age 79 — and varies markedly by ethnicity (high in Ashkenazi
+      Jewish and North African Arab populations). Heterozygous carriers are
+      candidates for emerging LRRK2-inhibitor trials. Genetic counseling
+      is appropriate for confirmed carriers.
+    citations:
+      - "PMID: 17035493 (Healy 2008, Lancet Neurol — penetrance estimates)"
+
+  - id: GBA_N370S
+    rsid: rs76763715
+    gene: GBA
+    chrom: chr1
+    pos: 155235843
+    ref: T
+    alt: C
+    risk_allele: C
+    name: "GBA Asn370Ser (Asn409Ser in newer numbering)"
+    category: neurodegeneration_lysosomal
+    evidence_tier: A
+    condition: "Gaucher disease type 1 (homozygous); Parkinson risk (any carrier)"
+    interpretation: |
+      Homozygous: Gaucher disease type 1 (lysosomal storage disease).
+      Heterozygous: ~5x Parkinson disease risk, earlier age of onset.
+      Same population-specific considerations as LRRK2 (high frequency in
+      Ashkenazi Jewish background). Relevant for PD surveillance and
+      for emerging GBA-modifying therapies.
+    citations:
+      - "PMID: 19846850 (Sidransky 2009, NEJM — GBA/PD meta-analysis)"
+
+  # =====================================================================
+  # Carrier-screening variants relevant for reproductive planning
+  # =====================================================================
+  - id: CFTR_F508del
+    rsid: rs113993960
+    gene: CFTR
+    chrom: chr7
+    pos: 117559590
+    ref: CTT
+    alt: C
+    risk_allele: C
+    name: "CFTR ΔF508 (Phe508del)"
+    category: reproductive_carrier
+    evidence_tier: A
+    condition: "Cystic fibrosis (recessive)"
+    interpretation: |
+      The most common CF-causing variant (~70% of CF alleles in
+      Europeans). Heterozygous carriers are unaffected. For reproductive
+      planning, partner testing is the standard follow-up; ACOG
+      recommends pan-ethnic CF carrier screening offered to all pregnant
+      patients. F508del het + partner CF carrier (any CF variant) = 25%
+      affected per pregnancy.
+    citations:
+      - "PMID: 2570460 (Kerem 1989, gene identification, Science)"
+
+  - id: SERPINA1_PiZ
+    rsid: rs28929474
+    gene: SERPINA1
+    chrom: chr14
+    pos: 94378610
+    ref: C
+    alt: T
+    risk_allele: T
+    name: "SERPINA1 PiZ (Glu342Lys)"
+    category: metabolic_pulmonary
+    evidence_tier: A
+    condition: "Alpha-1 antitrypsin deficiency"
+    interpretation: |
+      PiZZ homozygotes have severe AAT deficiency → early-onset COPD
+      (especially in smokers) + liver disease. PiZ het + PiS het is
+      moderate-deficiency (PiSZ phenotype). PiZ het alone is usually
+      asymptomatic but a mild COPD risk modifier, particularly with
+      smoking exposure. Serum AAT level + PI phenotyping is the standard
+      confirmation for any positive carrier finding.
+    citations:
+      - "PMID: 16264058 (de Serres 2002, AAT deficiency review)"
+
+  - id: SERPINA1_PiS
+    rsid: rs17580
+    gene: SERPINA1
+    chrom: chr14
+    pos: 94380925
+    ref: A
+    alt: T
+    risk_allele: T
+    name: "SERPINA1 PiS (Glu264Val)"
+    category: metabolic_pulmonary
+    evidence_tier: A
+    condition: "Alpha-1 antitrypsin deficiency (lower-penetrance allele)"
+    interpretation: |
+      PiS is milder than PiZ. PiSS homozygotes have only mild AAT
+      reduction. PiSZ compound heterozygotes have moderate deficiency.
+      Most relevant when combined with PiZ; isolated PiS heterozygosity
+      is generally not clinically meaningful.
+    citations:
+      - "PMID: 16264058 (de Serres 2002)"
