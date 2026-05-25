@@ -247,6 +247,188 @@ variants:
       - "PMID: 17463249 (Zeggini 2008, replication meta-analysis)"
 
   # =====================================================================
+  # GCKR — metabolic syndrome modulator
+  # =====================================================================
+  - id: GCKR_rs1260326
+    rsid: rs1260326
+    gene: GCKR
+    chrom: chr2
+    pos: 27508073
+    ref: T
+    alt: C
+    risk_allele: T   # T = Leu, associated with elevated TG, lower glucose
+    name: "GCKR Pro446Leu (rs1260326)"
+    category: metabolic
+    evidence_tier: A
+    condition: "Modulates fasting glucose / triglycerides / uric acid (pleiotropic GWAS signal)"
+    interpretation: |
+      T (Leu) allele lowers fasting glucose modestly but raises
+      triglycerides and uric acid. One of the most pleiotropic common
+      variants in human genetics (GWAS-significant for ~20 traits). Mostly
+      informative as a baseline modulator rather than acutely actionable.
+    citations:
+      - "PMID: 18464913 (Vaxillaire 2008, Diabetes — first metabolic-trait association)"
+      - "https://www.snpedia.com/index.php/rs1260326"
+
+  # =====================================================================
+  # HLA-DQ2.5 / DQ8 — celiac disease risk (vegetarian + grain context)
+  # =====================================================================
+  - id: HLA_DQ25_rs2187668
+    rsid: rs2187668
+    gene: HLA-DQA1
+    chrom: chr6
+    pos: 32605884
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "HLA-DQ2.5 tag SNP (rs2187668)"
+    category: autoimmune
+    evidence_tier: A
+    condition: "Celiac disease risk allele (tags HLA-DQA1*05:01/DQB1*02:01 haplotype)"
+    interpretation: |
+      Tag SNP for the HLA-DQ2.5 haplotype, present in ~95% of celiac
+      patients. The genotype is necessary-but-not-sufficient: ~30-40% of
+      the general European population carries DQ2.5 or DQ8 yet most do not
+      develop celiac. A NEGATIVE result has high negative predictive value
+      (~99%) and effectively rules out celiac. A POSITIVE result is
+      informative if there are GI symptoms, iron-deficiency anemia, or a
+      first-degree-relative celiac diagnosis — but is NOT a diagnosis on
+      its own. Standard celiac diagnosis still requires serology (anti-tTG)
+      and (if positive) duodenal biopsy.
+    citations:
+      - "PMID: 18391950 (Karell 2003, Hum Immunol — HLA in celiac)"
+      - "PMID: 17878301 (van Heel 2007, Nat Genet — GWAS confirmation)"
+      - "https://www.snpedia.com/index.php/rs2187668"
+
+  - id: HLA_DQ8_rs7454108
+    rsid: rs7454108
+    gene: HLA-DQB1
+    chrom: chr6
+    pos: 32672906
+    ref: T
+    alt: C
+    risk_allele: C
+    name: "HLA-DQ8 tag SNP (rs7454108)"
+    category: autoimmune
+    evidence_tier: A
+    condition: "Celiac disease risk allele (tags HLA-DQA1*03:01/DQB1*03:02 haplotype)"
+    interpretation: |
+      DQ8 is the second celiac-associated haplotype (~5-10% of celiac
+      cases that are DQ2.5-negative). Same interpretive frame as DQ2.5:
+      negative result rules celiac out with high NPV; positive is a
+      necessary-but-not-sufficient genetic background.
+    citations:
+      - "PMID: 18391950 (Karell 2003)"
+
+  # =====================================================================
+  # Lipid-handling variants (stack with APOE ε4 + family CAD)
+  # =====================================================================
+  - id: SORT1_rs646776
+    rsid: rs646776
+    gene: SORT1
+    chrom: chr1
+    pos: 109275684
+    ref: T
+    alt: C
+    risk_allele: T   # T is the higher-LDL allele; C is protective
+    name: "SORT1 rs646776 (1p13 LDL/CAD locus)"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "Strongest non-APOE common variant for LDL cholesterol and CAD risk"
+    interpretation: |
+      The 1p13 locus (tagged by rs646776) is one of the largest-effect
+      common variants for LDL outside the FH genes — about a 5-10 mg/dL
+      LDL difference per allele. The C (minor) allele lowers LDL and CAD
+      risk; T/T carriers have the opposite. Stacks with APOE ε4 + family
+      CAD to refine the overall genetic CV risk picture. Mechanism is via
+      SORT1-mediated VLDL secretion.
+    citations:
+      - "PMID: 18193044 (Willer 2008, Nat Genet — original lipid GWAS)"
+      - "PMID: 21909110 (Musunuru 2010, Nature — mechanistic dissection)"
+
+  - id: APOA5_rs662799
+    rsid: rs662799
+    gene: APOA5
+    chrom: chr11
+    pos: 116792991
+    ref: T
+    alt: C
+    risk_allele: C
+    name: "APOA5 -1131T>C (rs662799)"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "Elevated triglycerides; modest CAD risk"
+    interpretation: |
+      Promoter variant of APOA5 (an apolipoprotein that regulates VLDL
+      and chylomicron metabolism). C-allele carriers have higher fasting
+      triglycerides (~20-30% increase per allele). Particularly relevant
+      with otherwise borderline lipid panel — if TG is elevated and APOA5
+      is C-carrier, dietary intervention (lower refined carb, higher
+      omega-3) typically has good response.
+    citations:
+      - "PMID: 12172303 (Pennacchio 2001, Science — gene discovery)"
+      - "PMID: 18193044 (Willer 2008, GWAS confirmation)"
+
+  - id: CETP_TaqIB
+    rsid: rs708272
+    gene: CETP
+    chrom: chr16
+    pos: 56962376
+    ref: G
+    alt: A
+    risk_allele: G   # G allele (B1) — lower HDL, slightly higher CAD risk
+    name: "CETP TaqIB (rs708272)"
+    category: cardiovascular
+    evidence_tier: A
+    condition: "HDL cholesterol level; modest CAD risk modulation"
+    interpretation: |
+      B2 (A) allele is associated with ~10-15% higher HDL and modestly
+      lower CAD risk than B1 (G). One of the better-replicated HDL GWAS
+      hits. CETP inhibitor drugs (anacetrapib etc.) target this pathway,
+      though clinical-trial outcomes have been mixed.
+    citations:
+      - "PMID: 8636430 (Kuivenhoven 1998, NEJM — CETP/HDL/atherosclerosis)"
+
+  - id: LIPC_rs1800588
+    rsid: rs1800588
+    gene: LIPC
+    chrom: chr15
+    pos: 58431744
+    ref: C
+    alt: T
+    risk_allele: C
+    name: "LIPC -514 C>T (rs1800588)"
+    category: cardiovascular
+    evidence_tier: B
+    condition: "Hepatic lipase activity; HDL cholesterol level"
+    interpretation: |
+      T allele reduces hepatic lipase activity → modestly higher HDL.
+      Diet interaction: high-fat diet may attenuate the HDL-raising effect
+      in T-carriers. Effect size smaller than CETP / APOA5.
+    citations:
+      - "PMID: 11181643 (Ordovas 2002, Circulation — diet-gene interaction)"
+
+  - id: APOA1_rs670
+    rsid: rs670
+    gene: APOA1
+    chrom: chr11
+    pos: 116836064
+    ref: G
+    alt: A
+    risk_allele: G
+    name: "APOA1 -75 G>A (rs670)"
+    category: cardiovascular
+    evidence_tier: B
+    condition: "HDL level; some evidence for diet-gene interaction (PUFA response)"
+    interpretation: |
+      Promoter variant; A-allele carriers may have a stronger HDL
+      response to dietary polyunsaturated fat intake. Effect smaller and
+      less consistent than other lipid loci; included primarily for
+      completeness of the lipid-modifier set.
+    citations:
+      - "PMID: 12576349 (Ordovas 2002, J Am Coll Nutr — PUFA interaction)"
+
+  # =====================================================================
   # F5 Leiden + F2 G20210A — common thrombophilias (esp. relevant with SERPINC1)
   # =====================================================================
   - id: F5_Leiden

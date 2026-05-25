@@ -364,3 +364,124 @@ variants:
     citations:
       - "PMID: 19236184 (Brooks 2009, PLoS Med — ALDH2 + alcohol + cancer)"
       - "https://www.snpedia.com/index.php/rs671"
+
+  # =====================================================================
+  # CYP1A2 — caffeine metabolism
+  # =====================================================================
+  - id: CYP1A2_rs762551
+    rsid: rs762551
+    gene: CYP1A2
+    chrom: chr15
+    pos: 74749576
+    ref: C
+    alt: A
+    risk_allele: C   # C = slow metabolizer (allele *1F has A = fast)
+    name: "CYP1A2 -163C>A (rs762551)"
+    category: nutrition_lifestyle
+    evidence_tier: B
+    condition: "Caffeine metabolism rate; slow metabolizers have prolonged caffeine half-life"
+    interpretation: |
+      A/A (fast metabolizers) clear caffeine more quickly than C/C (slow).
+      Fast metabolizers may tolerate caffeine without sleep disruption;
+      slow metabolizers are more likely to experience prolonged effects
+      (anxiety, sleep disruption, possibly elevated MI risk at >2-3 cups/day).
+      Tier B because the effect is modest and individual variation is large.
+    citations:
+      - "PMID: 16522832 (Cornelis 2006, JAMA — caffeine/MI gene-environment)"
+      - "https://www.snpedia.com/index.php/rs762551"
+
+  # =====================================================================
+  # PER3 / CLOCK — circadian rhythm
+  # =====================================================================
+  - id: PER3_rs228697
+    rsid: rs228697
+    gene: PER3
+    chrom: chr1
+    pos: 7848187
+    ref: G
+    alt: C
+    risk_allele: C
+    name: "PER3 rs228697 (Met942Thr)"
+    category: nutrition_circadian
+    evidence_tier: B
+    condition: "Modest association with morningness/eveningness chronotype"
+    interpretation: |
+      C allele weakly associated with evening chronotype and possibly mood
+      disorders. The well-known PER3 functional variant is actually a
+      4-vs-5 repeat VNTR (rs57875989) that is not callable from short-read
+      WGS; rs228697 is a SNP proxy in the same gene. Tier B at best.
+    citations:
+      - "PMID: 17068132 (Archer 2007, Sleep — PER3 chronotype)"
+
+  - id: CLOCK_rs1801260
+    rsid: rs1801260
+    gene: CLOCK
+    chrom: chr4
+    pos: 55435202
+    ref: T
+    alt: C
+    risk_allele: C
+    name: "CLOCK 3111T>C (rs1801260)"
+    category: nutrition_circadian
+    evidence_tier: B
+    condition: "Chronotype; mild association with weight regulation under shifted schedules"
+    interpretation: |
+      C allele weakly associated with evening preference and (in some
+      studies) reduced weight-loss response under hypocaloric diets when
+      meal timing is shifted late. Effect size modest; not strongly
+      actionable beyond reinforcing the value of regular sleep/meal timing.
+    citations:
+      - "PMID: 19568224 (Garaulet 2009, Int J Obes — CLOCK + diet)"
+
+  # =====================================================================
+  # ACTN3 / ACE — muscle-fiber + endurance
+  # =====================================================================
+  - id: ACTN3_R577X
+    rsid: rs1815739
+    gene: ACTN3
+    chrom: chr11
+    pos: 66560624
+    ref: C
+    alt: T
+    risk_allele: T   # X (T) = null allele, no alpha-actinin-3 in fast-twitch fibers
+    name: "ACTN3 R577X (rs1815739)"
+    category: nutrition_athletic
+    evidence_tier: A
+    condition: "Alpha-actinin-3 expression in fast-twitch muscle: T/T (XX) homozygotes lack the protein"
+    interpretation: |
+      C/C (RR): full alpha-actinin-3 — overrepresented among elite power
+      athletes (sprinters, jumpers).
+      T/T (XX): no alpha-actinin-3 — modestly overrepresented among elite
+      endurance athletes. ~18% of Europeans are XX.
+      C/T: intermediate.
+      Effect sizes are small at the individual level; this is mostly a
+      "fun to know" variant. There's some evidence that XX individuals have
+      faster recovery from eccentric muscle damage and slightly less risk
+      of strain injuries, but training response varies widely.
+    citations:
+      - "PMID: 12915476 (Yang 2003, Am J Hum Genet — original elite-athlete report)"
+      - "PMID: 18043712 (MacArthur 2008, Hum Mol Genet — comprehensive review)"
+
+  - id: ACE_rs4343
+    rsid: rs4343
+    gene: ACE
+    chrom: chr17
+    pos: 63488530
+    ref: G
+    alt: A
+    risk_allele: G   # G corresponds to the D (deletion) allele — higher ACE activity
+    name: "ACE rs4343 (tag SNP for I/D polymorphism)"
+    category: nutrition_athletic_cardiovascular
+    evidence_tier: B
+    condition: "ACE activity; modest association with athletic performance and BP response"
+    interpretation: |
+      The famous ACE polymorphism is a 287-bp Alu indel (I/D, rs4646994)
+      that is not detectable from standard SNP-only VCFs. rs4343 is in
+      tight LD with I/D — G typically tags D (higher ACE activity,
+      power/strength phenotype), A typically tags I (lower ACE activity,
+      endurance phenotype). Beyond athletic performance, the D allele is
+      associated with modestly higher BP and possibly differential
+      ACE-inhibitor / ARB response.
+    citations:
+      - "PMID: 9620829 (Rigat 1990, J Clin Invest — original I/D characterization)"
+      - "PMID: 16518401 (Williams 2004 — rs4343 as I/D proxy)"
