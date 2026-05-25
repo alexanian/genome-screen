@@ -19,6 +19,7 @@
 results/
 work/
 .clinvar_cache/
+.pharmcat_cache/
 .nextflow/
 .nextflow.log*
 *.nextflow.log*

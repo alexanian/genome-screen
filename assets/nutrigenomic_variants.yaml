@@ -366,6 +366,59 @@ variants:
       - "https://www.snpedia.com/index.php/rs671"
 
   # =====================================================================
+  # Iron metabolism — non-HFE variants (HFE itself is in curated_risk_variants.yaml)
+  # Particularly relevant for vegetarian + preconception/pregnancy context.
+  # =====================================================================
+  - id: TMPRSS6_rs855791
+    rsid: rs855791
+    gene: TMPRSS6
+    chrom: chr22
+    pos: 37066896
+    ref: A
+    alt: G
+    risk_allele: G   # G allele → higher hepcidin → reduced iron absorption → IDA risk
+    name: "TMPRSS6 V736A (rs855791)"
+    category: nutrition_iron_reproductive
+    evidence_tier: A
+    condition: "Reduced iron absorption; elevated risk of iron-deficiency anemia"
+    interpretation: |
+      The G allele encodes the lower-activity TMPRSS6 isoform, which fails
+      to adequately suppress hepcidin during iron need. Hepcidin then blocks
+      enteric iron absorption — so paradoxically, G/G is associated with
+      LOWER serum iron and elevated IDA risk despite the gene being on the
+      "iron uptake" side of the pathway.
+      Particularly relevant for: (1) vegetarians (plant-iron is already
+      less bioavailable — heme iron from meat is more efficient), (2) women
+      of childbearing age with cyclical iron loss, (3) pregnancy planning
+      (iron requirements roughly double). G/G women may need more
+      aggressive iron supplementation preconception and through pregnancy;
+      consider IV iron rather than oral if oral fails.
+    citations:
+      - "PMID: 19820697 (Benyamin 2009, Nat Genet — GWAS of iron status)"
+      - "PMID: 22431568 (An 2012, Hum Mol Genet — IDA risk meta-analysis)"
+
+  - id: TF_rs3811647
+    rsid: rs3811647
+    gene: TF
+    chrom: chr3
+    pos: 133779031
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "TF rs3811647 (transferrin levels)"
+    category: nutrition_iron
+    evidence_tier: A
+    condition: "Modulates serum transferrin level and transferrin saturation"
+    interpretation: |
+      A allele is associated with higher serum transferrin (~5-10% per
+      allele) and lower transferrin saturation. Higher transferrin
+      represents elevated iron-binding capacity, often interpreted as a
+      mild IDA-tending biomarker pattern. Combined with TMPRSS6 risk
+      genotype, would compound the iron-deficiency vulnerability.
+    citations:
+      - "PMID: 19820697 (Benyamin 2009, Nat Genet)"
+
+  # =====================================================================
   # CYP1A2 — caffeine metabolism
   # =====================================================================
   - id: CYP1A2_rs762551
