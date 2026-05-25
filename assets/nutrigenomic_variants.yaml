@@ -1,0 +1,366 @@
+# Nutrigenomic variants — diet- and supplementation-relevant SNPs.
+#
+# Distinct from assets/curated_risk_variants.yaml: these are *weaker* in
+# evidence and *softer* in actionability — they shift dietary/supplementation
+# decisions rather than triggering clinical workup. Most have tier B; the
+# tier-A entries are the ones with consistent meta-analysis support.
+#
+# Asset sourcing note: the original plan was to seed this list by scraping
+# MyGeneFood (https://www.mygenefood.com/genes/) for variants with science
+# grade >= B-. Their Terms of Service explicitly prohibit scraping,
+# systematic retrieval, and derivative compilations
+# (https://www.mygenefood.com/terms — Prohibited Activities clauses). We
+# instead hand-curated this list from primary literature and SNPedia
+# (CC-BY-NC-SA 3.0, attribution-friendly), shaped by the user's specific
+# context (vegetarian diet, known MTHFR compound heterozygosity, algae-
+# derived omega-3 supplementation, IVF/PGT-P planning).
+#
+# Coordinates are GRCh38 from dbSNP build 156. They should be verified at
+# runtime by lookup_variants.py — variants returning "no_data" across many
+# rows likely indicate either a coordinate error or a real coverage gap.
+
+source:
+  generated_at: '2026-05-24'
+  curator: 'Tessa Alexanian + Claude (with starter list from another Claude session)'
+  schema_version: '1.0'
+  primary_references:
+    - "SNPedia (https://www.snpedia.com) — community wiki, CC-BY-NC-SA 3.0"
+    - "PharmGKB (https://www.pharmgkb.org) — public domain pathway annotations"
+    - "Garcia-Bailo et al. 2009, Mol Genet Metab, PMID 19342287 (nutrigenetics review)"
+    - "Camp & Trujillo 2014, Curr Opin Lipidol, PMID 24535403 (dietary nutrigenetics)"
+
+variants:
+
+  # =====================================================================
+  # MTHFR — folate / one-carbon metabolism (user already knows compound het status)
+  # =====================================================================
+  - id: MTHFR_C677T
+    rsid: rs1801133
+    gene: MTHFR
+    chrom: chr1
+    pos: 11796321
+    ref: G
+    alt: A
+    risk_allele: A
+    name: "MTHFR C677T (Ala222Val)"
+    category: methylation_folate
+    evidence_tier: A
+    condition: "Reduced MTHFR enzyme activity (~35% TT, ~65% CT vs CC); elevated homocysteine; folate cofactor preference for 5-MTHF over folic acid"
+    interpretation: |
+      Most-studied folate-metabolism variant. TT homozygotes have markedly
+      reduced enzyme activity and benefit from 5-MTHF (methylfolate) rather
+      than folic acid. Compound het with A1298C (commonly self-reported in
+      direct-to-consumer reports) has intermediate activity. Documented here
+      for completeness — user already knows her status.
+    citations:
+      - "PMID: 7647779 (Frosst 1995, original C677T characterization, Nat Genet)"
+      - "https://www.snpedia.com/index.php/rs1801133"
+
+  - id: MTHFR_A1298C
+    rsid: rs1801131
+    gene: MTHFR
+    chrom: chr1
+    pos: 11794419
+    ref: T
+    alt: G
+    risk_allele: G
+    name: "MTHFR A1298C (Glu429Ala)"
+    category: methylation_folate
+    evidence_tier: A
+    condition: "Modest reduction in MTHFR activity; compound het with C677T is the most common 'reduced-activity' genotype"
+    interpretation: |
+      Mild effect alone; significant in compound heterozygous configuration
+      with C677T. Compound C677T het + A1298C het reduces activity to ~50%
+      of CC/AA, similar to a single C677T homozygote.
+    citations:
+      - "PMID: 9545395 (van der Put 1998, Am J Hum Genet)"
+      - "https://www.snpedia.com/index.php/rs1801131"
+
+  # =====================================================================
+  # FUT2 — secretor status, B12 absorption, microbiome composition
+  # =====================================================================
+  - id: FUT2_secretor
+    rsid: rs601338
+    gene: FUT2
+    chrom: chr19
+    pos: 48703417
+    ref: G
+    alt: A
+    risk_allele: A    # AA = non-secretor
+    name: "FUT2 rs601338 (W143X, non-secretor)"
+    category: nutrition_microbiome
+    evidence_tier: A
+    condition: "Non-secretor (AA): no ABO antigens in mucosal secretions; ~20% lower vitamin B12 absorption; altered gut microbiome; ~50% lower norovirus susceptibility"
+    interpretation: |
+      Non-secretors (AA homozygous) have ~15-30% lower B12 absorption and
+      altered gut microbiota (fewer Bifidobacterium). For a vegetarian
+      already at higher B12-deficiency risk, AA status is a meaningful
+      argument for routine B12 supplementation and periodic B12/MMA
+      monitoring. Also notable: AA is protective against norovirus
+      gastroenteritis (rs601338 was the gene's discovery via norovirus
+      susceptibility GWAS).
+    citations:
+      - "PMID: 19057669 (Hazra 2009, B12 GWAS, Nat Genet)"
+      - "PMID: 19089878 (Tanaka 2009, B12 replication)"
+      - "https://www.snpedia.com/index.php/rs601338"
+
+  # =====================================================================
+  # BCMO1 — beta-carotene → retinol conversion (CRITICAL for vegetarians)
+  # =====================================================================
+  - id: BCMO1_rs12934922
+    rsid: rs12934922
+    gene: BCO1     # newer official symbol; BCMO1 historical
+    chrom: chr16
+    pos: 81264597
+    ref: T
+    alt: A
+    risk_allele: A    # A allele reduces conversion efficiency ~50%
+    name: "BCO1 (BCMO1) rs12934922 (Thr170Met)"
+    category: nutrition_vegetarian
+    evidence_tier: A
+    condition: "Reduced β-carotene → retinol conversion efficiency"
+    interpretation: |
+      Carriers of the A allele convert dietary β-carotene to retinol
+      ~50% less efficiently than homozygous T/T. For a vegetarian relying
+      on plant carotenoids as the primary vitamin A source, AA homozygotes
+      especially may be functionally vitamin-A deficient despite adequate
+      β-carotene intake. Preconception/pregnancy specifically: vitamin A
+      requirements rise, and most prenatal vitamins use β-carotene rather
+      than preformed retinol — worth checking the label and considering a
+      preformed-retinol prenatal. Confirm with serum retinol if concerned.
+    citations:
+      - "PMID: 19553537 (Leung 2009, FASEB J — conversion efficiency)"
+      - "PMID: 22113863 (Lietz 2012, J Nutr — vitamin A status interaction)"
+      - "https://www.snpedia.com/index.php/rs12934922"
+
+  - id: BCMO1_rs7501331
+    rsid: rs7501331
+    gene: BCO1
+    chrom: chr16
+    pos: 81263903
+    ref: C
+    alt: T
+    risk_allele: T
+    name: "BCO1 (BCMO1) rs7501331 (Arg267Ser)"
+    category: nutrition_vegetarian
+    evidence_tier: A
+    condition: "Further reduced β-carotene conversion (compounds with rs12934922)"
+    interpretation: |
+      Second functionally-validated BCO1 variant. Effect compounds with
+      rs12934922 — carriers of risk alleles at both positions show the
+      strongest reduction in retinol production from β-carotene.
+    citations:
+      - "PMID: 19553537 (Leung 2009)"
+
+  # =====================================================================
+  # FADS1 / FADS2 — omega-3 / omega-6 desaturation (algae DHA strategy check)
+  # =====================================================================
+  - id: FADS1_rs174546
+    rsid: rs174546
+    gene: FADS1
+    chrom: chr11
+    pos: 61802358
+    ref: C
+    alt: T
+    risk_allele: T    # T = lower desaturase activity, slower ALA→EPA→DHA
+    name: "FADS1 rs174546"
+    category: nutrition_lipid
+    evidence_tier: A
+    condition: "Reduced fatty-acid desaturase activity; slower endogenous EPA/DHA synthesis from plant ALA"
+    interpretation: |
+      T-allele carriers convert plant α-linolenic acid (ALA) to long-chain
+      omega-3s (EPA, DHA) less efficiently. For a vegetarian whose dietary
+      DHA/EPA depends on endogenous conversion from ALA (flax, walnut,
+      chia) rather than direct fish/algae intake, TT homozygotes are most
+      likely to be functionally low on DHA. Confirms the value of direct
+      algae-derived EPA/DHA supplementation as a hedge against poor
+      conversion — especially important preconception and during pregnancy
+      (DHA for fetal neurodevelopment).
+    citations:
+      - "PMID: 16677002 (Schaeffer 2006, original GWAS, Hum Mol Genet)"
+      - "PMID: 21677062 (Lemaitre 2011, CHARGE consortium meta-analysis)"
+      - "https://www.snpedia.com/index.php/rs174546"
+
+  - id: FADS2_rs174575
+    rsid: rs174575
+    gene: FADS2
+    chrom: chr11
+    pos: 61823754
+    ref: C
+    alt: G
+    risk_allele: G
+    name: "FADS2 rs174575"
+    category: nutrition_lipid
+    evidence_tier: B
+    condition: "Reduced delta-6-desaturase activity (concordant signal with FADS1 cluster)"
+    interpretation: |
+      In LD with rs174546 in the FADS1/FADS2 cluster; typically concordant.
+      Same interpretive frame as FADS1 — algae DHA/EPA supplementation is
+      reasonable insurance against reduced endogenous conversion.
+    citations:
+      - "PMID: 16677002 (Schaeffer 2006)"
+
+  # =====================================================================
+  # MCM6/LCT — lactase persistence (relevant for vegetarian dairy reliance)
+  # =====================================================================
+  - id: MCM6_rs4988235
+    rsid: rs4988235
+    gene: LCT     # the SNP is in MCM6 but regulates LCT
+    chrom: chr2
+    pos: 135851076
+    ref: G
+    alt: A
+    risk_allele: G   # G/G is non-persistent (lactose intolerant adults); A allele confers lactase persistence
+    name: "MCM6/LCT rs4988235 (lactase persistence)"
+    category: nutrition_carbohydrate
+    evidence_tier: A
+    condition: "Lactase persistence in European populations: A allele dominant; G/G is the ancestral non-persistent state"
+    interpretation: |
+      AA or AG: lactase-persistent into adulthood (can digest dairy).
+      GG: non-persistent — adult-onset lactose maldigestion / intolerance.
+      Population frequency varies enormously by ancestry (>90% persistent
+      in Northern Europe, <10% in East Asia and West Africa). For a
+      vegetarian who relies on dairy as a protein/calcium source, GG
+      status meaningfully limits options; alternative calcium sources
+      (leafy greens, fortified plant milks, calcium-set tofu) and
+      protein sources should be planned for.
+    citations:
+      - "PMID: 14758574 (Enattah 2002, Nat Genet — original report)"
+      - "https://www.snpedia.com/index.php/rs4988235"
+
+  # =====================================================================
+  # VDR cluster — vitamin D receptor variants
+  # =====================================================================
+  - id: VDR_Fok1
+    rsid: rs2228570
+    gene: VDR
+    chrom: chr12
+    pos: 47879112
+    ref: A     # f allele (long protein, lower transcriptional activity)
+    alt: G     # F allele (short protein, higher activity)
+    risk_allele: A   # 'f' allele
+    name: "VDR FokI (rs2228570)"
+    category: nutrition_micronutrient
+    evidence_tier: B
+    condition: "VDR translation start site polymorphism affecting receptor isoform; modest influence on bone density / Ca absorption / immunity"
+    interpretation: |
+      Fok1 affects the translation start site of VDR (the only Fok1
+      variant that actually changes the protein, vs Bsm1/Taq1/Apa1 which
+      are intronic or synonymous tag SNPs). The 'f' (A) allele encodes a
+      slightly longer, less-active receptor. Effects on bone mineral
+      density and calcium absorption are real but modest. May modestly
+      shift vitamin D supplementation target (consider serum 25(OH)D
+      monitoring at 30 ng/mL minimum, target ~40-60 if symptomatic).
+    citations:
+      - "PMID: 9101294 (Arai 1997, original FokI characterization, J Bone Miner Res)"
+      - "https://www.snpedia.com/index.php/rs2228570"
+
+  - id: VDR_BsmI
+    rsid: rs1544410
+    gene: VDR
+    chrom: chr12
+    pos: 47846052
+    ref: C
+    alt: T
+    risk_allele: T
+    name: "VDR BsmI (rs1544410)"
+    category: nutrition_micronutrient
+    evidence_tier: B
+    condition: "VDR intronic SNP; tag SNP for VDR haplotype; modest BMD / cancer / autoimmunity associations"
+    interpretation: |
+      Bsm1 is intronic and does not change the protein; it's a tag SNP for
+      VDR 3'-UTR haplotypes that influence mRNA stability. Associations
+      with BMD, type 2 diabetes risk, and several autoimmune conditions
+      reported but effect sizes small. Useful primarily in combination
+      with Taq1 / Apa1 to define the BAT haplotype.
+    citations:
+      - "PMID: 8062430 (Morrison 1994, Nature — original BMD association)"
+      - "https://www.snpedia.com/index.php/rs1544410"
+
+  - id: VDR_TaqI
+    rsid: rs731236
+    gene: VDR
+    chrom: chr12
+    pos: 47844974
+    ref: T
+    alt: C
+    risk_allele: C
+    name: "VDR TaqI (rs731236)"
+    category: nutrition_micronutrient
+    evidence_tier: B
+    condition: "VDR synonymous variant; tag SNP often in LD with BsmI"
+    interpretation: |
+      Synonymous (no amino acid change); tag SNP that combines with BsmI
+      and ApaI to define VDR haplotypes used in many BMD and supplement-
+      response studies.
+    citations:
+      - "https://www.snpedia.com/index.php/rs731236"
+
+  - id: VDR_ApaI
+    rsid: rs7975232
+    gene: VDR
+    chrom: chr12
+    pos: 47845054
+    ref: A
+    alt: C
+    risk_allele: C
+    name: "VDR ApaI (rs7975232)"
+    category: nutrition_micronutrient
+    evidence_tier: B
+    condition: "VDR intronic; tag SNP for the BAT (BsmI-ApaI-TaqI) haplotype"
+    interpretation: |
+      Third member of the classical VDR tag-SNP trio. Most useful for
+      haplotype assembly; minimal individual interpretation.
+    citations:
+      - "https://www.snpedia.com/index.php/rs7975232"
+
+  # =====================================================================
+  # SLC23A1 — vitamin C transporter
+  # =====================================================================
+  - id: SLC23A1_rs33972313
+    rsid: rs33972313
+    gene: SLC23A1
+    chrom: chr5
+    pos: 139409841
+    ref: C
+    alt: T
+    risk_allele: T
+    name: "SLC23A1 rs33972313 (Val264Met)"
+    category: nutrition_micronutrient
+    evidence_tier: B
+    condition: "Reduced sodium-dependent vitamin C transporter activity → lower plasma ascorbate at given intake"
+    interpretation: |
+      The T allele reduces SLC23A1 (SVCT1) transporter function. T-allele
+      carriers have lower steady-state plasma vitamin C levels at any
+      given dietary intake, particularly noticeable below ~100 mg/day.
+      Modest practical implication: T carriers may need to consistently
+      hit dietary vitamin C targets (citrus, peppers, leafy greens are
+      easy in a vegetarian diet) rather than relying on sporadic intake.
+    citations:
+      - "PMID: 17151167 (Cahill 2007, Am J Clin Nutr — population study)"
+      - "https://www.snpedia.com/index.php/rs33972313"
+
+  # =====================================================================
+  # ALDH2 — alcohol metabolism (mostly East Asian, kept for completeness)
+  # =====================================================================
+  - id: ALDH2_rs671
+    rsid: rs671
+    gene: ALDH2
+    chrom: chr12
+    pos: 111803962
+    ref: G
+    alt: A
+    risk_allele: A   # *2 allele (loss-of-function)
+    name: "ALDH2 Glu504Lys (alcohol flush)"
+    category: nutrition_alcohol
+    evidence_tier: A
+    condition: "Loss-of-function ALDH2: acetaldehyde accumulation when drinking → flushing, nausea; massively elevated esophageal cancer risk in drinkers"
+    interpretation: |
+      Almost exclusively present in East Asian populations (~30-50% carrier
+      frequency); extremely rare elsewhere. Carriers (especially homozygotes)
+      should avoid or strictly limit alcohol — esophageal cancer risk is
+      multiplied dramatically in drinkers with this variant. Expected
+      negative for European ancestry; included for completeness.
+    citations:
+      - "PMID: 19236184 (Brooks 2009, PLoS Med — ALDH2 + alcohol + cancer)"
+      - "https://www.snpedia.com/index.php/rs671"

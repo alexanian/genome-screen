@@ -183,11 +183,68 @@ variants:
     evidence_tier: A
     condition: "Coronary heart disease"
     interpretation: |
-      In near-perfect LD with rs1333049 in Europeans; reported as a tag
-      SNP for the same locus. Often the two are concordant; if discordant,
-      may reflect a recombination event or genotyping error worth checking.
+      In near-perfect LD (r2 > 0.95) with rs1333049 in Europeans — they are
+      essentially the same signal, not independent. We keep both for
+      concordance checking (discordance flags either a recombination event
+      or a genotyping error worth investigating) but the risk should not be
+      double-counted; interpret jointly.
     citations:
       - "PMID: 17478679 (McPherson 2007)"
+
+  # =====================================================================
+  # COMT — methylation, dopamine, estrogen metabolism (psych + reproductive)
+  # =====================================================================
+  - id: COMT_Val158Met
+    rsid: rs4680
+    gene: COMT
+    chrom: chr22
+    pos: 19963748
+    ref: G
+    alt: A
+    risk_allele: A    # Met allele (slower COMT enzyme)
+    name: "COMT Val158Met"
+    category: psych_methylation_reproductive
+    evidence_tier: B
+    condition: "Modulates prefrontal dopamine, stress response, estrogen clearance, methylation demand"
+    interpretation: |
+      Val/Val (G/G): faster COMT enzyme → lower prefrontal dopamine, faster
+      catechol-estrogen clearance, higher stress resilience but lower working
+      memory under pressure. Met/Met (A/A): slower enzyme, opposite profile.
+      Specifically relevant for: (1) post-IVF-retrieval hormonal swings and
+      postpartum mood (slower estrogen metabolite clearance amplifies the
+      hormonal-shift signal in Met carriers); (2) methylation demand —
+      slower COMT means higher SAM-e turnover, which intersects with MTHFR
+      status. Tier B because effect sizes are modest and context-dependent.
+    citations:
+      - "PMID: 11258625 (Lachman 1996, original Val158Met characterization)"
+      - "PMID: 16690864 (Smolka 2005, fMRI working-memory/dopamine)"
+
+  # =====================================================================
+  # TCF7L2 — type 2 diabetes
+  # =====================================================================
+  - id: TCF7L2_rs7903146
+    rsid: rs7903146
+    gene: TCF7L2
+    chrom: chr10
+    pos: 112998590
+    ref: C
+    alt: T
+    risk_allele: T
+    name: "TCF7L2 rs7903146"
+    category: metabolic
+    evidence_tier: A
+    condition: "Type 2 diabetes (strongest single common variant; impaired insulin secretion)"
+    interpretation: |
+      Per-T-allele OR ≈ 1.4 for T2D — the largest effect size of any
+      common variant for T2D, well-replicated across populations.
+      Heterozygous carriers may benefit from earlier and more frequent
+      glucose screening (HbA1c every 1-2 years from age 30) and earlier
+      lifestyle intervention if any signs of impaired glucose tolerance.
+      Particularly relevant in conjunction with gestational risk during
+      pregnancy planning.
+    citations:
+      - "PMID: 16415884 (Grant 2006, original Icelandic discovery, Nat Genet)"
+      - "PMID: 17463249 (Zeggini 2008, replication meta-analysis)"
 
   # =====================================================================
   # F5 Leiden + F2 G20210A — common thrombophilias (esp. relevant with SERPINC1)
